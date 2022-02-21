@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Chat App</title>
+    <link rel="icon" href="/public/img/favicon.png">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- helpdesk user form below-->
+    <div id="helpdesk-form">
+            <div class="centered-form">
+                <div class="centered-form__box">
+                    <h1>Admin Login</h1>
+                    <form action="/adminLogin" method="POST" >
+                        <label>Username</label>
+                        <input type="text" placeholder="Display Name" name="username" required>
+                        <label>Password</label>
+                        <input type="password" placeholder="min. 8 characters" name="password" required>
+                        <label>Room</label>
+                        <select name="room">
+                            <option>Tech Support 1</option>
+                            <option>Tech Support 2</option>
+                            <option>Tech Support 3</option>
+                            <option>Tech Support 4</option>
+                            <option>General Enquiries 1</option>
+                            <option>General Enquiries 2</option>
+                            <option>General Enquiries 3</option>
+                            <option>General Enquiries 4</option>
+                            <option>Cancellation/Refunding 1</option>
+                            <option>Cancellation/Refunding 2</option>
+                            <option>Cancellation/Refunding 3</option>
+                            <option>Cancellation/Refunding 4</option>
+                            <option>Sales Associate 1</option>
+                            <option>Sales Associate 2</option>
+                            <option>Sales Associate 3</option>
+                            <option>Sales Associate 4</option>
+                        </select>
+                        <button>Submit</button>
+                    </form>
+                </div>
+            </div>
+    </div>
+
+
+</body>
+
+</html>

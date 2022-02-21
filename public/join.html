@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Chat App</title>
+    <link rel="icon" href="/public/img/favicon.png">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- helpdesk user form below-->
+    <div id="helpdesk-form">
+            <div class="centered-form">
+                <div class="centered-form__box">
+                    <h1>Helpdesk Staff Portal</h1>
+                    <form action="/credentials" method="POST">
+                        <label>Username</label>
+                        <input type="text" placeholder="Display Name" name="username" required>
+                        <label>Password</label>
+                        <input type="password" placeholder="min. 8 characters" name="password" required>
+                        <button>Submit</button>
+                    </form>
+                </div>
+            </div>
+    </div>
+
+    <!-- Client form below-->
+    <div id="client-form">
+            <div class="centered-form">
+                <div class="centered-form__box">
+                    <h1>Client Join</h1>
+                    <form action="chat.html">
+                        <label>Display Name</label>
+                        <input type="text" placeholder="Display Name" name="username" required>
+                        <label>Room</label>
+                <select name="room">
+                    <option>Tech Support</option>
+                    <option>General Enquiries</option>
+                    <option>Cancellation/refunding</option>
+                    <option>Sales Associate</option>
+                    <option>5</option>
+                    <option>6</option>
+                </select>
+                        <button>Join</button>
+                    </form>
+                </div>
+            </div>
+    </div>
+<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+<script type="text/javascript">
+    // Parse the URL parameter
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        console.log(decodeURIComponent(results[2].replace(/\+/g, " ")));
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+    // Give the parameter a variable name
+    var dynamicContent = getParameterByName('category');
+
+    $(document).ready(function () {
+
+        // Check if the URL parameter is Helpdesk
+        if (dynamicContent == 'Helpdesk') {
+            $('#helpdesk-form').show();
+        }
+        // Check if the URL parameter is Client
+        if (dynamicContent == 'Client') {
+            $('#client-form').show();
+        }    
+    });
+</script>
+</body>
+
+</html>
