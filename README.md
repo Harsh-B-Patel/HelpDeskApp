@@ -14,4 +14,4 @@ start app by running "npm run start"
 
 app is hosted at localhost:3000 
 
-from other vm, if u did labs then just enter vm1 ipaddr:3000 to acess app. 
+from other vm, if u did labs then just enter vm1 ipaddr:3000 to access app. 
