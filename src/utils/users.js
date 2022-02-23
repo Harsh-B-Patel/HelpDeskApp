@@ -7,12 +7,12 @@ const rooms = ['Room 1', 'Room 2','Room 3', 'Room 4'];
 const addUser = ({ id, username, room }) => {
     // Clean the data
     username = username.trim()
-    room = room
+    //room = room
 
     // Validate the data
-    if (!username || !room) {
+    if (!username) {
         return {
-            error: 'Username and room are required!'
+            error: 'Username required!'
         }
     }
 
@@ -51,6 +51,7 @@ const addUser = ({ id, username, room }) => {
       return roomsNotOccupied;
 
   }
+
 const removeUser = (id) => {
     const index = users.findIndex((user) => user.id === id)
 
@@ -68,10 +69,12 @@ const getUserAll = () => {
     return users;
 }
 
+
 const getUsersInRoom = (room) => {
-    room = room.toLowerCase()
+    room = room
     return users.filter((user) => user.room === room)
 }
+
 
 module.exports = {
     addUser,

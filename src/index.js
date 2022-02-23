@@ -16,6 +16,18 @@ app.use(bodyparser.urlencoded({extended: true}));
 app.use(express.static(publicDirectoryPath))
 
 
+// variables
+const rooms = ['Room 1', 'Room 2','Room 3', 'Room 4'];
+var room1_occupied = false;
+var room2_occupied = false;
+var room3_occupied = false;
+var room4_occupied = false;
+var foundAdmin = false;
+var admin_join = false;
+var user_occupied_room_1 = false;
+var user_occupied_room_2 = false;
+var user_occupied_room_3 = false;
+var user_occupied_room_4 = false;
 // No Sql is very diffrent from SQL, NO SQL IS COLLECTIONS WHILE SQL is TAbles
 
 MongoClient.connect('mongodb+srv://test:test4481@cluster0.rnp32.mongodb.net/helpdeskdb?retryWrites=true&w=majority', (err, client)=> {
@@ -59,13 +71,7 @@ MongoClient.connect('mongodb+srv://test:test4481@cluster0.rnp32.mongodb.net/help
     })
 
 
-    const rooms = ['Room 1', 'Room 2','Room 3', 'Room 4'];
-    var room1_occupied = false;
-    var room2_occupied = false;
-    var room3_occupied = false;
-    var room4_occupied = false;
 
-    var foundAdmin = false;
     app.post('/adminLogin', (req,res) => {
         console.log("admin login page for credentials!!");
         console.log("These are the credentials requested by the admin --> " ,req.body);
@@ -83,6 +89,10 @@ MongoClient.connect('mongodb+srv://test:test4481@cluster0.rnp32.mongodb.net/help
                     console.log("the admin is fully authenticated!!");
                     // redirects to room selected
                     //Check room booleans here
+
+                    // admin has room selection previledge
+                    // upon selcting a room it becomes occupied by that admin,
+                    // 2 admins can select the same room
                     if(req.body.room == "Room 1"){
                       room1_occupied = true;
                     }
@@ -95,6 +105,8 @@ MongoClient.connect('mongodb+srv://test:test4481@cluster0.rnp32.mongodb.net/help
                     if(req.body.room == "Room 4"){
                       room4_occupied = true;
                     }
+                    admin_join = true;
+                    console.log(req.body.room);
                     return res.redirect('/chat.html?username=' + `${req.body.username}&room=${req.body.room}` );
                 }
             }
@@ -135,7 +147,7 @@ MongoClient.connect('mongodb+srv://test:test4481@cluster0.rnp32.mongodb.net/help
 })
 
 io.on('connection', (socket) => {
-    console.log('New WebSocket connection')
+    console.log('New WebSocket index.js connection')
     //socket.emit('message', "Welcome from the server!!");
 
     socket.emit('clientData', {
@@ -143,8 +155,12 @@ io.on('connection', (socket) => {
     });
 
 
+
+
     socket.on('join', (options, callback) => {
         const { error, user } = addUser({ id: socket.id, ...options })
+        var assigned_room = "Room 1";
+        //const rooms = ['Room 1', 'Room 2','Room 3', 'Room 4'];
 
         if (error) {
             return callback(error)
@@ -154,7 +170,64 @@ io.on('connection', (socket) => {
         // lets automate this too a room with helpdesk personel or else a random room
         // If we can send user to helpdesk user's room that would be great
         // USE ROOM OCCUPIED BOOLEANS CREATED ABOVE ADMIN_LOGIN HERE TO DETERMINE USER ROOM
+        if (foundAdmin & !admin_join){
+          // if an admin is logged in
+          // chnage user room to admin room
+
+          // if an admin is with another user in a room then assign a new room to user
+          if (!user_occupied_room_1){
+            // assign room 1 to user
+            assigned_room = "Room 1";
+            user_occupied_room_1 = true;
+
+          }else if(!user_occupied_room_2) {
+            assigned_room = "Room 2";
+            user_occupied_room_2 = true;
+
+          }else if(!user_occupied_room_3) {
+            assigned_room = "Room 3";
+            user_occupied_room_3 = true;
+
+          }else if(!user_occupied_room_4) {
+            assigned_room = "Room 4";
+            user_occupied_room_4 = true;
+
+          }
+
+
+        }else{
+          // user is assigned to non occupied room
+          if (!admin_join){
+            assigned_room = "Room 1";
+            if (!user_occupied_room_1){
+              // assign room 1 to user
+              assigned_room = "Room 1";
+              user_occupied_room_1 = true;
+
+            }else if(!user_occupied_room_2) {
+              assigned_room = "Room 2";
+              user_occupied_room_2 = true;
+
+            }else if(!user_occupied_room_3) {
+              assigned_room = "Room 3";
+              user_occupied_room_3 = true;
+
+            }else if(!user_occupied_room_4) {
+              assigned_room = "Room 4";
+              user_occupied_room_4 = true;
+
+            }
+          }
+        }
+
+        if (admin_join){
+          admin_join = false;
+        }else{
+          user.room = assigned_room;
+        }
+
         socket.join(user.room)
+        console.log(user.room);
 
         socket.emit('message', generateMessage('', 'Welcome everyone!'))
         socket.broadcast.to(user.room).emit('message', generateMessage('Admin', `${user.username} has joined!`))
@@ -174,8 +247,8 @@ io.on('connection', (socket) => {
         callback()
     })
 
-    var roomObj = {"rooms" : roomsAvailble()}
-    socket.emit('roomsAvailable', roomObj );
+    //var roomObj = {"rooms" : roomsAvailble()}
+    //socket.emit('roomsAvailable', roomObj );
 
 
 

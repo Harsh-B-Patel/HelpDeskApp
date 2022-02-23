@@ -1,22 +1,22 @@
-const socket = io()
+//const socket = io()
 
 // Elements
 //const $messageForm = document.querySelector('#message-form')
 //const $messageFormInput = $messageForm.querySelector('input')
 //const $messageFormButton = $messageForm.querySelector('button')
 //const $sendLocationButton = document.querySelector('#send-location')
-const $messages = document.querySelector('#messages')
-const $rooms = document.querySelector('#room-details')
+//const $messages = document.querySelector('#messages')
+//const $rooms = document.querySelector('#room-details')
 
 // Templates
 // const messageTemplate = document.querySelector('#message-template').innerHTML
 // const locationMessageTemplate = document.querySelector('#location-message-template').innerHTML
 // const sidebarTemplate = document.querySelector('#sidebar-template').innerHTML
-const roomTemplate = document.querySelector('#room-template').innerHTML
+//const roomTemplate = document.querySelector('#room-template').innerHTML
 
 // Options
 //const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true })
-
+/*
 socket.on('roomsAvailable', ({rooms}) => {
     //console.log(roomObj);
     const html = Mustache.render(roomTemplate, {
@@ -35,6 +35,7 @@ socket.on('message', (message) => {
     })
     $messages.insertAdjacentHTML('beforeend', html)
 })
+*/
 
 // socket.on('locationMessage', (message) => {
 //     console.log(message)
@@ -89,7 +90,7 @@ socket.on('message', (message) => {
 //             longitude: position.coords.longitude
 //         }, () => {
 //             $sendLocationButton.removeAttribute('disabled')
-//             console.log('Location shared!')  
+//             console.log('Location shared!')
 //         })
 //     })
 // })
