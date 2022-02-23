@@ -1,6 +1,6 @@
 const users = []
 const roomsOccupied = [];
-const rooms = ['Tech Support 1', 'Tech Support 2','Tech Support 3', 'Tech Support 4','Cancellation/Refunding 1','Cancellation/Refunding 2', 'Cancellation/Refunding 3', 'Cancellation/Refunding 4','General Enquiries 1', 'General Enquiries 2', 'General Enquiries 3', 'General Enquiries 4', 'Sales Associate 1', 'Sales Associate 2' , 'Sales Associate 3', 'Sales Associate 4'];
+const rooms = ['Room 1', 'Room 2','Room 3', 'Room 4'];
 
 
 

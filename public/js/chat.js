@@ -4,13 +4,13 @@ const socket = io()
 const $messageForm = document.querySelector('#message-form')
 const $messageFormInput = $messageForm.querySelector('input')
 const $messageFormButton = $messageForm.querySelector('button')
-const $sendLocationButton = document.querySelector('#send-location')
+//const $sendLocationButton = document.querySelector('#send-location')
 const $messages = document.querySelector('#messages')
 //const $rooms = document.querySelector('#room-details')
 
 // Templates
 const messageTemplate = document.querySelector('#message-template').innerHTML
-const locationMessageTemplate = document.querySelector('#location-message-template').innerHTML
+//const locationMessageTemplate = document.querySelector('#location-message-template').innerHTML
 const sidebarTemplate = document.querySelector('#sidebar-template').innerHTML
 //const roomTemplate = document.querySelector('#room-template').innerHTML
 
@@ -30,6 +30,7 @@ socket.on('message', (message) => {
     $messages.insertAdjacentHTML('beforeend', html)
 })
 
+/*
 socket.on('locationMessage', (message) => {
     console.log(message)
     const html = Mustache.render(locationMessageTemplate, {
@@ -39,6 +40,7 @@ socket.on('locationMessage', (message) => {
     })
     $messages.insertAdjacentHTML('beforeend', html)
 })
+*/
 
 socket.on('roomData', ({ room, users }) => {
     const html = Mustache.render(sidebarTemplate, {
@@ -69,7 +71,7 @@ $messageForm.addEventListener('submit', (e) => {
         console.log('Message delivered!')
     })
 })
-
+/*
 $sendLocationButton.addEventListener('click', () => {
     if (!navigator.geolocation) {
         return alert('Geolocation is not supported by your browser.')
@@ -83,11 +85,11 @@ $sendLocationButton.addEventListener('click', () => {
             longitude: position.coords.longitude
         }, () => {
             $sendLocationButton.removeAttribute('disabled')
-            console.log('Location shared!')  
+            console.log('Location shared!')
         })
     })
 })
-
+*/
 socket.emit('join', { username, room }, (error) => {
     if (error) {
         alert(error)

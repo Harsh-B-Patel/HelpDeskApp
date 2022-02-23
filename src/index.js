@@ -17,7 +17,7 @@ app.use(express.static(publicDirectoryPath))
 
 
 // No Sql is very diffrent from SQL, NO SQL IS COLLECTIONS WHILE SQL is TAbles
-//MongoClient.connect('mongodb+srv://rd110018:RIShab95!@cluster0-ajjrr.mongodb.net/test?retryWrites=true&w=majority', (err, client)=> {
+
 MongoClient.connect('mongodb+srv://test:test4481@cluster0.rnp32.mongodb.net/helpdeskdb?retryWrites=true&w=majority', (err, client)=> {
   // This works
     // .. Start the server
@@ -26,7 +26,7 @@ MongoClient.connect('mongodb+srv://test:test4481@cluster0.rnp32.mongodb.net/help
         return console.log(err);
     }
 
-    // Change db to our database
+    // Change db to  database
         console.log("the database connection is successful!!");
          db = client.db('helpdeskdb'); // helpdesk here is: Databse name with credentaisl collection, it also set by default above
 
@@ -39,6 +39,7 @@ MongoClient.connect('mongodb+srv://test:test4481@cluster0.rnp32.mongodb.net/help
         {
             return res.redirect('/clientform.html');
         }
+        // Dont need helpdesk dashboard
         if(req.body.category === "Helpdesk Dashboard")
         {
             return res.redirect('/helpdeskform.html')
@@ -58,6 +59,11 @@ MongoClient.connect('mongodb+srv://test:test4481@cluster0.rnp32.mongodb.net/help
     })
 
 
+    const rooms = ['Room 1', 'Room 2','Room 3', 'Room 4'];
+    var room1_occupied = false;
+    var room2_occupied = false;
+    var room3_occupied = false;
+    var room4_occupied = false;
 
     var foundAdmin = false;
     app.post('/adminLogin', (req,res) => {
@@ -70,26 +76,31 @@ MongoClient.connect('mongodb+srv://test:test4481@cluster0.rnp32.mongodb.net/help
         {
             for(let i=0;i< results.length ; i++)
             {
-               // console.log(" --- > " , results[i]);
                 if(req.body.username === results[i].username && req.body.password === results[i].password) // no room filed needed here
                 {
                     foundAdmin = true;
                     console.log("this is the value of the found now --> " , foundAdmin);
                     console.log("the admin is fully authenticated!!");
+                    // redirects to room selected
+                    //Check room booleans here
+                    if(req.body.room == "Room 1"){
+                      room1_occupied = true;
+                    }
+                    if(req.body.room == "Room 2"){
+                      room2_occupied = true;
+                    }
+                    if(req.body.room == "Room 3"){
+                      room3_occupied = true;
+                    }
+                    if(req.body.room == "Room 4"){
+                      room4_occupied = true;
+                    }
                     return res.redirect('/chat.html?username=' + `${req.body.username}&room=${req.body.room}` );
                 }
-
             }
-        })
-        // if(!foundAdmin)
-        // {
-        //     ;
-        // }
-        // else
-        // {
-        //     console.log("this is the value of the found asdasda --> " , foundAdmin);
-        // }
+            return res.redirect('/unauthenticated.html');
 
+        })
     })
 
 
@@ -114,16 +125,15 @@ MongoClient.connect('mongodb+srv://test:test4481@cluster0.rnp32.mongodb.net/help
 
             }
         })
-        // if(!found)
-        // {
-        //     return res.redirect('/unauthenticated.html');
-        // }
+
+
     })
 
 
 
 
 })
+
 io.on('connection', (socket) => {
     console.log('New WebSocket connection')
     //socket.emit('message', "Welcome from the server!!");
@@ -140,11 +150,13 @@ io.on('connection', (socket) => {
             return callback(error)
         }
 
+        // takes user to room selected in clientform.html
+        // lets automate this too a room with helpdesk personel or else a random room
+        // If we can send user to helpdesk user's room that would be great
+        // USE ROOM OCCUPIED BOOLEANS CREATED ABOVE ADMIN_LOGIN HERE TO DETERMINE USER ROOM
         socket.join(user.room)
 
-
-         socket.emit('message', generateMessage('', 'Welcome everyone!'))
-
+        socket.emit('message', generateMessage('', 'Welcome everyone!'))
         socket.broadcast.to(user.room).emit('message', generateMessage('Admin', `${user.username} has joined!`))
         io.to(user.room).emit('roomData', {
             room: user.room,
@@ -158,12 +170,6 @@ io.on('connection', (socket) => {
     socket.on('sendMessage', (message, callback) => {
         const user = getUser(socket.id)
 
-        // remove the fucking filter need swear words
-        //const filter = new Filter()
-        //if (filter.isProfane(message)) {
-          //  return callback('Profanity is not allowed!')
-      //  }
-
         io.to(user.room).emit('message', generateMessage(user.username, message))
         callback()
     })
@@ -173,12 +179,6 @@ io.on('connection', (socket) => {
 
 
 
-// Dont need location to be removed
-    socket.on('sendLocation', (coords, callback) => {
-        const user = getUser(socket.id)
-        io.to(user.room).emit('locationMessage', generateLocationMessage(user.username, `https://google.com/maps?q=${coords.latitude},${coords.longitude}`))
-        callback()
-    })
 
     socket.on('disconnect', () => {
         const user = removeUser(socket.id)
