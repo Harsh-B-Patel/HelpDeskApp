@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <title>Chat App</title>
+    <title>HelpDesk</title>
     <link rel="icon" href="/public/img/favicon.png">
     <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
     <div class="centered-form">
         <div class="centered-form__box">
-            <h1>Select your category</h1>
+            <h1>Welcome to</h1>
+            <h1 class="WebName">HelpDesk.</h1>
             <form action="/joinForm" method="POST">
                 <!-- <label>Select your category</label> -->
                 <select name="category">
-                    <option>Admin Login</option>
-                    <option>Helpdesk Dashboard</option>
                     <option>Client Login</option>
+                    <option>Admin Login</option>
+                    <!-- <option>Helpdesk Dashboard</option> -->
                 </select>
                 <button>Join</button>
             </form>
