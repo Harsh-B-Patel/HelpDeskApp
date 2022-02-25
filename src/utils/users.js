@@ -1,10 +1,10 @@
-const users = []
 const roomsOccupied = [];
 const rooms = ['Room 1', 'Room 2','Room 3', 'Room 4'];
+var users = []
+var admin = []
 
 
-
-const addUser = ({ id, username, room }) => {
+const addUser = ({ id, username, room, admin }) => {
     // Clean the data
     username = username.trim()
     //room = room
@@ -29,7 +29,7 @@ const addUser = ({ id, username, room }) => {
     }
 
     // Store user
-    const user = { id, username, room }
+    const user = { id, username, room, admin }
     users.push(user)
     roomsOccupied.push(room)
     console.log("add function is called!");
@@ -39,18 +39,20 @@ const addUser = ({ id, username, room }) => {
 }
 
 
-  const roomsAvailble = () => {
-      var roomsNotOccupied = [];
-      for(var i=0;i < rooms.length; i++)
-      {
-          if (roomsOccupied.indexOf(rooms[i]) === -1)
-          {
-              roomsNotOccupied.push(rooms[i]);
-          }
-      }
-      return roomsNotOccupied;
 
-  }
+
+const roomsAvailble = () => {
+    var roomsNotOccupied = [];
+    for(var i=0;i < rooms.length; i++)
+    {
+        if (roomsOccupied.indexOf(rooms[i]) === -1)
+        {
+            roomsNotOccupied.push(rooms[i]);
+        }
+    }
+    return roomsNotOccupied;
+
+}
 
 const removeUser = (id) => {
     const index = users.findIndex((user) => user.id === id)
