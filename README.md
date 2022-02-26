@@ -1,6 +1,6 @@
 # EECS4481
 
-Instructions to run the application on kali:
+Instructions to run the  Helpdesk application on kali:
 
 1) This application needs to have node installed (by default it is installed in kali), Node JS status can be check by running by "node -v". 
 
