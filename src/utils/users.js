@@ -32,10 +32,8 @@ const addUser = ({ id, username, room, admin }) => {
     // Store user
     const user = { id, username, room, admin }
     users.push(user)
-    //roomsOccupied.push(room)
     console.log("add function is called!");
-   // console.log("these are rooms currently occupied --> " , roomsOccupied);
-  //  roomsAvailble();
+    //roomsAvailble();
     return { user }
 }
 

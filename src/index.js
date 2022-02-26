@@ -144,7 +144,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("forceJoin", (options, callback) => {
-    //const { error, user } = addUser({ id: socket.id, admin: false, ...options });
     const user = getUser(socket.id);
 
     console.log(`movign user ${user.name} to room ${options.room}`)
@@ -181,13 +180,12 @@ io.on("connection", (socket) => {
   socket.on("join", (options, callback) => {
     const { error, user } = addUser({ id: socket.id, admin: false, ...options });
     var assigned_room = "Waiting Room";
-    //const rooms = ['Room 1', 'Room 2','Room 3', 'Room 4'];
 
     if (error) {
       return callback(error);
     }
 
-    //super janky - change immediately!!!
+    //assign room
     if(!admin_join){
       if (!user_occupied_room_1) {
         assigned_room = "Room 1";
@@ -260,26 +258,11 @@ io.on("connection", (socket) => {
     
   });
 
-  //var roomObj = {"rooms" : roomsAvailble()}
-  //socket.emit('roomsAvailable', roomObj );
 
   socket.on("disconnect", () => {
     const user = removeUser(socket.id);
     if (user) {
 
-      /*if(!user.admin){
-
-        if (user.room == "Room 1") {
-          user_occupied_room_1 = false;
-        } else if (user.room == "Room 2") {
-          user_occupied_room_2 = false;
-        } else if (user.room == "Room 3") {
-          user_occupied_room_3 = false;
-        } else if (user.room == "Room 4") {
-          user_occupied_room_4 = false;
-        }
-
-      }*/
       let rooms = roomsAvailable();
         user_occupied_room_1 = rooms[0];
         user_occupied_room_2 = rooms[1];
@@ -304,80 +287,3 @@ io.on("connection", (socket) => {
 server.listen(port, () => {
   console.log(`Listening on localhost:${port}`);
 });
-
-/* recycle bin:
-
- // takes user to room selected in clientform.html
-    // lets automate this too a room with helpdesk personel or else a random room
-    // If we can send user to helpdesk user's room that would be great
-    // USE ROOM OCCUPIED BOOLEANS CREATED ABOVE ADMIN_LOGIN HERE TO DETERMINE USER ROOM
-    if (foundAdmin & !admin_join) {
-      // if an admin is logged in
-      // chnage user room to admin room
-
-      // if an admin is with another user in a room then assign a new room to user
-      if (!user_occupied_room_1) {
-        // assign room 1 to user
-        assigned_room = "Room 1";
-        user_occupied_room_1 = true;
-      } else if (!user_occupied_room_2) {
-        assigned_room = "Room 2";
-        user_occupied_room_2 = true;
-      } else if (!user_occupied_room_3) {
-        assigned_room = "Room 3";
-        user_occupied_room_3 = true;
-      } else if (!user_occupied_room_4) {
-        assigned_room = "Room 4";
-        user_occupied_room_4 = true;
-      }
-    } else {
-      // user is assigned to non occupied room
-      if (!admin_join) {
-        assigned_room = "Room 1";
-        if (!user_occupied_room_1) {
-          // assign room 1 to user
-          assigned_room = "Room 1";
-          user_occupied_room_1 = true;
-        } else if (!user_occupied_room_2) {
-          assigned_room = "Room 2";
-          user_occupied_room_2 = true;
-        } else if (!user_occupied_room_3) {
-          assigned_room = "Room 3";
-          user_occupied_room_3 = true;
-        } else if (!user_occupied_room_4) {
-          assigned_room = "Room 4";
-          user_occupied_room_4 = true;
-        }
-      }
-    }
-
-    if (admin_join) {
-      admin_join = false;
-    } else {
-      user.room = assigned_room;
-    }
-
-
-
-
-
-
-                // redirects to room selected
-            //Check room booleans here
-
-            // admin has room selection previledge
-            // upon selcting a room it becomes occupied by that admin,
-            // 2 admins can select the same room
-            if (req.body.room == "Room 1") {
-              room1_occupied = true;
-            }
-            if (req.body.room == "Room 2") {
-              room2_occupied = true;
-            }
-            if (req.body.room == "Room 3") {
-              room3_occupied = true;
-            }
-            if (req.body.room == "Room 4") {
-              room4_occupied = true;
-            }
-    */
