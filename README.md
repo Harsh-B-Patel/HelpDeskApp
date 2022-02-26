@@ -2,7 +2,7 @@
 
 Instructions to run the application on kali:
 
-This application needs to have node installed (by default it is installed in kali), Node Js status can be check by running by "node -v". 
+This application needs to have node installed (by default it is installed in kali), Node JS status can be check by running by "**node -v**". 
 
 run "npm install" in the directory with package.json
 
