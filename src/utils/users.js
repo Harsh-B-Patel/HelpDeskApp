@@ -1,5 +1,5 @@
 var roomsOccupied = [];
-//var roomsfull;
+
 const rooms = ['Room 1', 'Room 2','Room 3', 'Room 4'];
 var users = []
 var admin = []
