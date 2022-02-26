@@ -1,4 +1,4 @@
-# EECS4481
+# HelpDeskApp
 
 Instructions to run the  Helpdesk application on kali:
 
