@@ -13,7 +13,7 @@ const {
   getUser,
   getUsersInRoom,
   getUserAll,
-  roomsAvailble,
+  roomsAvailable,
 } = require("./utils/users");
 const {
   addAdmin,
@@ -146,10 +146,23 @@ io.on("connection", (socket) => {
   socket.on("forceJoin", (options, callback) => {
     //const { error, user } = addUser({ id: socket.id, admin: false, ...options });
     const user = getUser(socket.id);
+
+    console.log(`movign user ${user.name} to room ${options.room}`)
+    //update user room
     user.room = options.room;
+    //update room statuses
+    let rooms = roomsAvailable();
+      user_occupied_room_1 = rooms[0];
+      user_occupied_room_2 = rooms[1];
+      user_occupied_room_3 = rooms[2];
+      user_occupied_room_4 = rooms[3];
+    console.log(user_occupied_room_1, user_occupied_room_2, user_occupied_room_3, user_occupied_room_4);
+    //reconnect user to new room
     socket.join(user.room);
     //console.log(user.room);
     console.log(user);
+    
+
 
     socket.emit("message", generateMessage("System", `Welcome ${user.username}!`));
     socket.broadcast
@@ -253,7 +266,9 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     const user = removeUser(socket.id);
     if (user) {
-      if(!user.admin){
+
+      /*if(!user.admin){
+
         if (user.room == "Room 1") {
           user_occupied_room_1 = false;
         } else if (user.room == "Room 2") {
@@ -263,7 +278,14 @@ io.on("connection", (socket) => {
         } else if (user.room == "Room 4") {
           user_occupied_room_4 = false;
         }
-      }
+
+      }*/
+      let rooms = roomsAvailable();
+        user_occupied_room_1 = rooms[0];
+        user_occupied_room_2 = rooms[1];
+        user_occupied_room_3 = rooms[2];
+        user_occupied_room_4 = rooms[3];
+
 
       io.to(user.room).emit(
         "message",
@@ -274,8 +296,6 @@ io.on("connection", (socket) => {
         users: getUsersInRoom(user.room),
       });
     }
-
-    
 
     console.log(user_occupied_room_1, user_occupied_room_2, user_occupied_room_3, user_occupied_room_4);
   });
