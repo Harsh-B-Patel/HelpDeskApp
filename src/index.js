@@ -75,11 +75,59 @@ MongoClient.connect('mongodb+srv://test:test4481@cluster0.rnp32.mongodb.net/help
     app.post('/adminLogin', (req,res) => {
         console.log("Admin Login Page");
         console.log("Credentials Entered --> " ,req.body);
-        var cursor = db.collection('credentials').find();  // collection name credentials {JSon like objects here username, passowrd , room }
 
+        var cursor =  db.collection('credentials').find( { "username": req.body.username , "password": req.body.password});  //do query here
+        // returns password from soem reason 
 
         cursor.toArray(function(err, results)
         {
+          // only do first item i = 0;
+
+            for(let i=0;i< results.length ; i++)
+            {
+              console.log(results[i]);
+                if (results[i])
+                {
+                    foundAdmin = true;
+                    console.log("this is the value of the found now --> " , foundAdmin);
+                    console.log("the admin is fully authenticated!!");
+                    // redirects to room selected
+                    // Check room booleans here
+
+                    // admin has room selection previledge
+                    // upon selcting a room it becomes occupied by that admin,
+                    // 2 admins can select the same room
+                    if(req.body.room == "Room 1"){
+                      room1_occupied = true;
+                    }
+                    if(req.body.room == "Room 2"){
+                      room2_occupied = true;
+                    }
+                    if(req.body.room == "Room 3"){
+                      room3_occupied = true;
+                    }
+                    if(req.body.room == "Room 4"){
+                      room4_occupied = true;
+                    }
+                    admin_join = true;
+                    console.log(req.body.room);
+                    return res.redirect('/chat.html?username=' + `${req.body.username}&room=${req.body.room}` );
+                }
+            }
+            console.log("Invalid Credentials: Authentication Failed");
+            return res.redirect('/unauthenticated.html');
+
+        })
+
+
+
+        /*
+        var cursor = db.collection('credentials').find();
+
+        cursor.toArray(function(err, results)
+        {
+          // only do first item i = 0;
+
             for(let i=0;i< results.length ; i++)
             {
               console.log(results[i].username + " "+ results[i].password);
@@ -115,6 +163,8 @@ MongoClient.connect('mongodb+srv://test:test4481@cluster0.rnp32.mongodb.net/help
             return res.redirect('/unauthenticated.html');
 
         })
+        */
+
     })
 
 
