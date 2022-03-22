@@ -1,8 +1,43 @@
 const path = require("path");
-const http = require("http");
-const express = require("express");
-const socketio = require("socket.io");
-const Filter = require("bad-words");
+//const http = require("http");
+//const express = require("express");
+
+
+// HTTP/ HTTPS CONFIG - HTTP is commented out rn 
+var fs = require('fs');
+var http = require('http');
+var https = require('https');
+var privateKey  = fs.readFileSync(path.resolve('key.pem'));
+var certificate = fs.readFileSync(path.resolve('cert.pem'));
+
+var credentials = {key: privateKey, cert: certificate};
+var express = require('express');
+var app = express();
+app.enable('trust proxy')
+
+// your express configuration here
+
+//var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
+
+//httpServer.listen(3000);
+//httpsServer.listen(3000);
+
+
+/*
+// Some Session Code that may prove useful 
+const session = require('cookie-session');
+app.use(
+  session({
+    secret: "some secret",
+    httpOnly: true,  // Don't let browser javascript access cookies.
+    secure: true, // Only use cookies over https.
+  })
+);
+
+*/
+
+
 const {
   generateMessage,
   generateLocationMessage,
@@ -23,14 +58,20 @@ const {
   getAdminAll
 } = require("./utils/admins");
 const MongoClient = require("mongodb").MongoClient;
-const app = express();
-const server = http.createServer(app);
-const io = socketio(server);
+//const app = express();
+//const server = http.createServer(app);
+const socketio = require("socket.io");
+
+const io = socketio(httpsServer);
 const bodyparser = require("body-parser");
 const port = process.env.PORT || 3000;
 const publicDirectoryPath = path.join(__dirname, "../public");
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(express.static(publicDirectoryPath));
+
+
+
+
 
 // variables
 const rooms = ["Room 1", "Room 2", "Room 3", "Room 4"];
@@ -284,6 +325,6 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(port, () => {
-  console.log(`Listening on localhost:${port}`);
+httpsServer.listen(port, () => {
+  console.log(`Listening on https://localhost:${port}`);
 });
