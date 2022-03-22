@@ -70,6 +70,8 @@ app.use(bodyparser.urlencoded({ extended: true }));
 app.use(express.static(publicDirectoryPath));
 
 
+const crypto = require('crypto');
+  
 
 
 
@@ -120,12 +122,22 @@ MongoClient.connect(
 
     app.post("/adminLogin", (req, res) => {
       console.log("admin login page for credentials!!");
+      
+      /*
       console.log(
         "These are the credentials requested by the admin --> ",
         req.body
       );
+      */
 
-      var query = {username: req.body.username, password: req.body.password};
+      // hash stuff here SHA 256
+      var hashPwd = crypto.createHash('sha256').update(req.body.password).digest('hex');
+      console.log(
+        "These are the credentials requested by the admin --> username: " + req.body.username + " password: " + hashPwd
+      );
+      
+
+      var query = {username: req.body.username, password: hashPwd};
       var cursor = db.collection("credentials").find(query); 
 
       cursor.toArray(function (err, results) {
