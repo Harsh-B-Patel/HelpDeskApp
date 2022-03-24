@@ -1,12 +1,14 @@
 const path = require("path");
-//const http = require("http");
-//const express = require("express");
 
 
-// HTTP/ HTTPS CONFIG - HTTP is commented out rn 
+
+// HTTPS CONFIG  
 var fs = require('fs');
 var http = require('http');
+var http_port    =   process.env.PORT || 8080; 
 var https = require('https');
+var https_port    =   process.env.PORT_HTTPS || 3000; 
+const port = process.env.PORT || 3000;
 var privateKey  = fs.readFileSync(path.resolve('key.pem'));
 var certificate = fs.readFileSync(path.resolve('cert.pem'));
 
@@ -16,14 +18,17 @@ var app = express();
 app.enable('trust proxy')
 
 // your express configuration here
-
-//var httpServer = http.createServer(app);
 var httpsServer = https.createServer(credentials, app);
 
-//httpServer.listen(3000);
-//httpsServer.listen(3000);
 
-
+//HTTP 
+// Redirect from http port to https
+http.createServer(function (req, res) {
+   res.writeHead(301, { "Location": "https://" + req.headers['host'].replace(http_port,port) + req.url });
+   console.log("http request, will go to >> ");
+   console.log("https://" + req.headers['host'].replace(http_port,port) + req.url );
+   res.end();
+}).listen(http_port)
 /*
 // Some Session Code that may prove useful 
 const session = require('cookie-session');
@@ -64,7 +69,7 @@ const socketio = require("socket.io");
 
 const io = socketio(httpsServer);
 const bodyparser = require("body-parser");
-const port = process.env.PORT || 3000;
+
 const publicDirectoryPath = path.join(__dirname, "../public");
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(express.static(publicDirectoryPath));
