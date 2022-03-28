@@ -38,7 +38,7 @@ label {
   font-weight: 500;
 }
 
-input {
+#message-form {
   display: block;
   height: 50px;
   width: 100%;
@@ -60,6 +60,11 @@ select {
   font-size: 1.4rem;
   border-radius: 10px;
 }
+
+/* #OpenImgUpload {
+  background-image: url("/public/img/upload.png");
+  background-repeat: no-repeat;
+} */
 
 button {
   margin-top: 1rem;
