@@ -240,7 +240,7 @@ app.get("/clientform", (req, res) => {
   }else{
     console.log("cookies -> ", req.cookies["session_token"])
     const ses_cookie = sessions.get(req.cookies["session_token"]);
-    if(!ses_cookie || !ses_cookie.admin){
+    if(!ses_cookie){
       return res.redirect("/clientform.html");
     }else if(ses_cookie.isExpired() ){
       sessions.delete(req.cookies["session_token"]);
