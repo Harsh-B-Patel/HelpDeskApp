@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Chat App</title>
+    <link rel="icon" href="/public/img/favicon.png">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- helpdesk user form below-->
+    <div id="helpdesk-form">
+            <div class="centered-form">
+                <div class="centered-form__box">
+                    <h1>Welcome Back: <div id="name_disp">[ph] username</div></h1>
+                    <form action="/adminjoin2" method="POST" autocomplete="off">
+                        <label>Select a room:</label>
+                        <input type="hidden" id="name_field" name="username" value="admin" required>
+                        <select name="room">
+                            <option>Room 1</option>
+                            <option>Room 2</option>
+                            <option>Room 3</option>
+                            <option>Room 4</option>
+
+                        </select>
+                        <button>Submit</button>
+                    </form>
+                </div>
+            </div>
+    </div>
+
+</body>
+
+</html>
+
+<script>
+    var el_name = document.getElementById("name_field");
+    var disp_name = document.getElementById("name_disp");
+    var address = window.location.search;
+    var parameterList = new URLSearchParams(address);
+    el_name.value = parameterList.get("username");
+    disp_name.textContent = parameterList.get("username");
+</script>
