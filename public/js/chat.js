@@ -85,6 +85,7 @@ $imgUpload.onchange = () => {
     $messageFormInput.value = "";
     $messageFormInput.focus();
 
+
     if (error) {
       return console.log(error);
     }
@@ -137,3 +138,15 @@ socket.emit("join", { username, room }, (error) => {
     location.href = "/";
   }
 });
+=======
+if(!username){
+    //nothing
+}else{
+    socket.emit('join', { username, room }, (error) => {
+        if (error) {
+            alert(error)
+            location.href = '/'
+        }
+    })
+}
+
