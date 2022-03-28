@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Chat App</title>
+    <link rel="icon" href="/public/img/favicon.png">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- helpdesk user form below-->
+    <div id="helpdesk-form">
+            <div class="centered-form">
+                <div class="centered-form__box">
+                    <h1>Admin Login</h1>
+                    <form action="/adminLogin" method="POST" autocomplete="off">
+                        <label>Username</label>
+                        <input type="text" placeholder="Display Name" name="username" required>
+                        <label>Password</label>
+                        <input type="password" placeholder="min. 10 characters with Caps, Symbol, Number " name="password" required>
+                        <label>Room</label>
+                        <select name="room">
+                            <option>Room 1</option>
+                            <option>Room 2</option>
+                            <option>Room 3</option>
+                            <option>Room 4</option>
+
+                        </select>
+                        <button>Submit</button>
+                    </form>
+                </div>
+            </div>
+    </div>
+
+
+</body>
+
+</html>
