@@ -92,9 +92,13 @@ $messageForm.addEventListener('submit', (e) => {
     }
 })
 
-socket.emit('join', { username, room }, (error) => {
-    if (error) {
-        alert(error)
-        location.href = '/'
-    }
-})
+if(!username){
+    //nothing
+}else{
+    socket.emit('join', { username, room }, (error) => {
+        if (error) {
+            alert(error)
+            location.href = '/'
+        }
+    })
+}
