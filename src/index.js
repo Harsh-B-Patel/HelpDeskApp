@@ -234,13 +234,16 @@ app.post("/clientJoin", (req, res) => {
 });
 
 app.get("/clientform", (req, res) => {
-  console.log("here");
+  console.log("client join");
   if(!req.cookies || !req.cookies["session_token"]){
     return res.redirect("/clientform.html");
   }else{
     console.log("cookies -> ", req.cookies["session_token"])
     const ses_cookie = sessions.get(req.cookies["session_token"]);
-    if(!ses_cookie || ses_cookie.isExpired()){
+    if(!ses_cookie){
+      return res.redirect("/clientform.html");
+    }else if(ses_cookie.isExpired() ){
+      sessions.delete(req.cookies["session_token"]);
       return res.redirect("/clientform.html");
     }
     return res.redirect(`/chat.html?username=${ses_cookie.username}`);
@@ -248,16 +251,38 @@ app.get("/clientform", (req, res) => {
 });
 
 app.get("/adminform", (req, res) => {
-  console.log("here");
+  console.log("admin join");
   if(!req.cookies || !req.cookies["session_token"]){
     return res.redirect("/adminform.html");
   }else{
     console.log("cookies -> ", req.cookies["session_token"])
     const ses_cookie = sessions.get(req.cookies["session_token"]);
-    if(!ses_cookie || ses_cookie.isExpired() || !ses_cookie.admin){
+    if(!ses_cookie || !ses_cookie.admin){
+      return res.redirect("/adminform.html");
+    }else if(ses_cookie.isExpired() ){
+      sessions.delete(req.cookies["session_token"]);
       return res.redirect("/adminform.html");
     }
-    return res.redirect(`/chat.html?username=${ses_cookie.username}`);
+    admin_join = true;
+    return res.redirect(`/adminform2.html?username=${ses_cookie.username}`);
+  }
+});
+
+app.post("/adminjoin2", (req,res) => {
+  console.log("adminjoin part 2");
+  if(!req.cookies || !req.cookies["session_token"]){
+    return res.redirect("/adminform.html");
+  }else{
+    console.log("cookies -> ", req.cookies["session_token"])
+    const ses_cookie = sessions.get(req.cookies["session_token"]);
+    if(!ses_cookie || !ses_cookie.admin){
+      return res.redirect("/adminform.html");
+    }else if(ses_cookie.isExpired() ){
+      sessions.delete(req.cookies["session_token"]);
+      return res.redirect("/adminform.html");
+    }
+    admin_join = true;
+    return res.redirect(`/chat.html?username=${req.body.username}&room=${req.body.room}`);
   }
 });
 
