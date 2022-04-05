@@ -1,6 +1,6 @@
 var roomsOccupied = [];
 
-const rooms = ['Room 1', 'Room 2','Room 3', 'Room 4'];
+const rooms = ['Room 1', 'Room 2', 'Room 3', 'Room 4'];
 var users = []
 var admin = []
 
@@ -43,14 +43,14 @@ const addUser = ({ id, username, room, admin }) => {
 const roomsAvailable = () => {
     //update+return the roomsoccupied arrray
     let roomsOccupied = [false, false, false, false];
-    for(let user in users){
-        if (users[user].admin){
-            console.log("admin left");
-        }else if(users[user].room == 'Room 1') {
+    for (let user in users) {
+        if (users[user].admin) {
+            //console.log("admin left");
+        } else if (users[user].room == 'Room 1') {
             roomsOccupied[0] = true;
         } else if (users[user].room == 'Room 2') {
             roomsOccupied[1] = true;
-        } else if (users[user].room == 'Room 3'){
+        } else if (users[user].room == 'Room 3') {
             roomsOccupied[2] = true;
         } else if (users[user].room == 'Room 4') {
             roomsOccupied[3] = true;
@@ -58,6 +58,26 @@ const roomsAvailable = () => {
     }
     //console.log(roomsOccupied)
     return roomsOccupied;
+}
+
+const adminsAvailable = () => {
+    //update+return the roomsoccupied arrray
+    let adminOccupied = [false, false, false, false];
+    for (let user in users) {
+        if (users[user].admin) {
+            if (users[user].room == 'Room 1') {
+                adminOccupied[0] = true;
+            } else if (users[user].room == 'Room 2') {
+                adminOccupied[1] = true;
+            } else if (users[user].room == 'Room 3') {
+                adminOccupied[2] = true;
+            } else if (users[user].room == 'Room 4') {
+                adminOccupied[3] = true;
+            }
+        }
+    }
+    //console.log(roomsOccupied)
+    return adminOccupied;
 }
 
 const removeUser = (id) => {
@@ -90,5 +110,6 @@ module.exports = {
     getUser,
     getUsersInRoom,
     getUserAll,
-    roomsAvailable
+    roomsAvailable,
+    adminsAvailable
 }

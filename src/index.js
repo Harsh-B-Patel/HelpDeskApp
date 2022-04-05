@@ -5,14 +5,14 @@ const path = require("path");
 // HTTPS CONFIG  
 var fs = require('fs');
 var http = require('http');
-var http_port    =   process.env.PORT || 8080; 
+var http_port = process.env.PORT || 8080;
 var https = require('https');
-var https_port    =   process.env.PORT_HTTPS || 3000; 
+var https_port = process.env.PORT_HTTPS || 3000;
 const port = process.env.PORT || 3000;
-var privateKey  = fs.readFileSync(path.resolve('key.pem'));
+var privateKey = fs.readFileSync(path.resolve('key.pem'));
 var certificate = fs.readFileSync(path.resolve('cert.pem'));
 
-var credentials = {key: privateKey, cert: certificate};
+var credentials = { key: privateKey, cert: certificate };
 var express = require('express');
 var app = express();
 app.enable('trust proxy')
@@ -24,10 +24,10 @@ var httpsServer = https.createServer(credentials, app);
 //HTTP 
 // Redirect from http port to https
 http.createServer(function (req, res) {
-   res.writeHead(301, { "Location": "https://" + req.headers['host'].replace(http_port,port) + req.url });
-   console.log("http request, will go to >> ");
-   console.log("https://" + req.headers['host'].replace(http_port,port) + req.url );
-   res.end();
+  res.writeHead(301, { "Location": "https://" + req.headers['host'].replace(http_port, port) + req.url });
+  console.log("http request, will go to >> ");
+  console.log("https://" + req.headers['host'].replace(http_port, port) + req.url);
+  res.end();
 }).listen(http_port)
 
 // Some Session Code that may prove useful 
@@ -61,6 +61,7 @@ const {
   getUsersInRoom,
   getUserAll,
   roomsAvailable,
+  adminsAvailable
 } = require("./utils/users");
 const {
   addAdmin,
@@ -87,13 +88,13 @@ app.use(cookieparser());
 const crypto = require('crypto');
 const inspector = require("inspector");
 const { cookie } = require("express/lib/response");
-  
+
 
 
 
 // variables
 const rooms = ["Room 1", "Room 2", "Room 3", "Room 4"];
-const commandsList = ["move","boot","kill"];
+const commandsList = ["move", "boot", "kill"];
 var room1_occupied = false;
 var room2_occupied = false;
 var room3_occupied = false;
@@ -118,7 +119,7 @@ MongoClient.connect(
     // Change db to  database
     console.log("the database connection is successful!!");
     db = client.db("helpdeskdb"); // helpdesk here is: Databse name with credentaisl collection, it also set by default above
-    
+
     app.post("/clientData", (req, res) => {
       console.log("clientform is called!!");
       console.log(req.body);
@@ -129,7 +130,7 @@ MongoClient.connect(
 
     app.post("/adminLogin", (req, res) => {
       console.log("admin login page for credentials!!");
-      
+
       /*
       console.log(
         "These are the credentials requested by the admin --> ",
@@ -142,57 +143,57 @@ MongoClient.connect(
       console.log(
         "These are the credentials requested by the admin --> username: " + req.body.username + " password: " + hashPwd
       );
-      
+
       var username = req.body.username;
 
-      var query = {username: req.body.username, password: hashPwd};
-      var cursor = db.collection("credentials").find(query); 
+      var query = { username: req.body.username, password: hashPwd };
+      var cursor = db.collection("credentials").find(query);
 
       cursor.toArray(function (err, results) {
         //for (let i = 0; i < results.length; i++) {
-          if (
-            results.length >0 
-          ) {
-            // no room filed needed here
-            foundAdmin = true;
-            console.log("this is the value of the found now --> ", results);
-            console.log("the admin is fully authenticated!!");
+        if (
+          results.length > 0
+        ) {
+          // no room filed needed here
+          foundAdmin = true;
+          console.log("this is the value of the found now --> ", results);
+          console.log("the admin is fully authenticated!!");
 
-            if (req.body.room == "Room 1") {
-              room1_occupied = true;
-            }
-            if (req.body.room == "Room 2") {
-              room2_occupied = true;
-            }
-            if (req.body.room == "Room 3") {
-              room3_occupied = true;
-            }
-            if (req.body.room == "Room 4") {
-              room4_occupied = true;
-            }
-
-            admin_join = true;
-            console.log(req.body.room);
-
-            //addAdmin({id: results['id'], username: results['username'], room: req.body.room});
-
-            //issue session token here
-            
-            const now = new Date();
-            const expiresAt = new Date(now + 360 * 1000);
-            const token = uuid.v4();
-            const session = new Session(username, token, true, expiresAt);
-            res.cookie("session_token", token, {exipres: expiresAt, secure: true, httpOnly: true});
-            sessions.set(token, session);
-            console.log("valied tokens -->", sessions.size);
-
-            return res.redirect(
-              "/chat.html?username=" +
-                `${req.body.username}&room=${req.body.room}`
-            );
-          }else{
-            return res.redirect("/unauthenticated.html");
+          if (req.body.room == "Room 1") {
+            room1_occupied = true;
           }
+          if (req.body.room == "Room 2") {
+            room2_occupied = true;
+          }
+          if (req.body.room == "Room 3") {
+            room3_occupied = true;
+          }
+          if (req.body.room == "Room 4") {
+            room4_occupied = true;
+          }
+
+          admin_join = true;
+          console.log(req.body.room);
+
+          //addAdmin({id: results['id'], username: results['username'], room: req.body.room});
+
+          //issue session token here
+
+          const now = new Date();
+          const expiresAt = new Date(now + 360 * 1000);
+          const token = uuid.v4();
+          const session = new Session(username, token, true, expiresAt);
+          res.cookie("session_token", token, { exipres: expiresAt, secure: true, httpOnly: true });
+          sessions.set(token, session);
+          console.log("valied tokens -->", sessions.size);
+
+          return res.redirect(
+            "/chat.html?username=" +
+            `${req.body.username}&room=${req.body.room}`
+          );
+        } else {
+          return res.redirect("/unauthenticated.html");
+        }
       });
     });
 
@@ -224,10 +225,10 @@ app.post("/joinForm", (req, res) => {
   console.log(req.body);
 
   if (req.body.category === "Client Login") {
-      return res.redirect("/clientform");
+    return res.redirect("/clientform");
   }
   if (req.body.category === "Admin Login") {
-      return res.redirect("/adminform");
+    return res.redirect("/adminform");
   }
 });
 
@@ -241,21 +242,21 @@ app.post("/clientJoin", (req, res) => {
   const expiresAt = new Date(now + 360 * 1000);
   const token = uuid.v4();
   const session = new Session(username, token, false, expiresAt);
-  res.cookie("session_token", token, {exipres: expiresAt, secure: true, httpOnly: true});
+  res.cookie("session_token", token, { exipres: expiresAt, secure: true, httpOnly: true });
   sessions.set(token, session);
   return res.redirect(`/chat.html?username=${username}`);
 });
 
 app.get("/clientform", (req, res) => {
   console.log("client join");
-  if(!req.cookies || !req.cookies["session_token"]){
+  if (!req.cookies || !req.cookies["session_token"]) {
     return res.redirect("/clientform.html");
-  }else{
+  } else {
     console.log("cookies -> ", req.cookies["session_token"])
     const ses_cookie = sessions.get(req.cookies["session_token"]);
-    if(!ses_cookie){
+    if (!ses_cookie) {
       return res.redirect("/clientform.html");
-    }else if(ses_cookie.isExpired() ){
+    } else if (ses_cookie.isExpired()) {
       sessions.delete(req.cookies["session_token"]);
       return res.redirect("/clientform.html");
     }
@@ -265,14 +266,14 @@ app.get("/clientform", (req, res) => {
 
 app.get("/adminform", (req, res) => {
   console.log("admin join");
-  if(!req.cookies || !req.cookies["session_token"]){
+  if (!req.cookies || !req.cookies["session_token"]) {
     return res.redirect("/adminform.html");
-  }else{
+  } else {
     console.log("cookies -> ", req.cookies["session_token"])
     const ses_cookie = sessions.get(req.cookies["session_token"]);
-    if(!ses_cookie || !ses_cookie.admin){
+    if (!ses_cookie || !ses_cookie.admin) {
       return res.redirect("/adminform.html");
-    }else if(ses_cookie.isExpired() ){
+    } else if (ses_cookie.isExpired()) {
       sessions.delete(req.cookies["session_token"]);
       return res.redirect("/adminform.html");
     }
@@ -282,16 +283,16 @@ app.get("/adminform", (req, res) => {
   }
 });
 
-app.post("/adminjoin2", (req,res) => {
+app.post("/adminjoin2", (req, res) => {
   console.log("adminjoin part 2");
-  if(!req.cookies || !req.cookies["session_token"]){
+  if (!req.cookies || !req.cookies["session_token"]) {
     return res.redirect("/adminform.html");
-  }else{
+  } else {
     console.log("cookies -> ", req.cookies["session_token"])
     const ses_cookie = sessions.get(req.cookies["session_token"]);
-    if(!ses_cookie || !ses_cookie.admin){
+    if (!ses_cookie || !ses_cookie.admin) {
       return res.redirect("/adminform.html");
-    }else if(ses_cookie.isExpired() ){
+    } else if (ses_cookie.isExpired()) {
       sessions.delete(req.cookies["session_token"]);
       return res.redirect("/adminform.html");
     }
@@ -311,21 +312,23 @@ io.on("connection", (socket) => {
   socket.on("forceJoin", (options, callback) => {
     const user = getUser(socket.id);
 
+    socket.leave(user.room);
+
     console.log(`movign user ${user.name} to room ${options.room}`)
     //update user room
     user.room = options.room;
-    //update room statuses
-    let rooms = roomsAvailable();
-      user_occupied_room_1 = rooms[0];
-      user_occupied_room_2 = rooms[1];
-      user_occupied_room_3 = rooms[2];
-      user_occupied_room_4 = rooms[3];
-    console.log(user_occupied_room_1, user_occupied_room_2, user_occupied_room_3, user_occupied_room_4);
+    //update room statuses - deprecated??
+    // let rooms = roomsAvailable();
+    // user_occupied_room_1 = rooms[0];
+    // user_occupied_room_2 = rooms[1];
+    // user_occupied_room_3 = rooms[2];
+    // user_occupied_room_4 = rooms[3];
+    // console.log(user_occupied_room_1, user_occupied_room_2, user_occupied_room_3, user_occupied_room_4);
     //reconnect user to new room
     socket.join(user.room);
     //console.log(user.room);
     console.log(user);
-    
+
 
 
     socket.emit("message", generateMessage("System", `Welcome ${user.username}!`));
@@ -350,11 +353,73 @@ io.on("connection", (socket) => {
       return callback(error);
     }
 
-    if (foundAdmin & !admin_join) {
-      // if an admin is logged in
-      // chnage user room to admin room
+    // if (foundAdmin & !admin_join) {
+    //   // if an admin is logged in
+    //   // chnage user room to admin room
 
-      // if an admin is with another user in a room then assign a new room to user
+    //   // if an admin is with another user in a room then assign a new room to user
+    //   if (!user_occupied_room_1 && room1_occupied) {
+    //     // assign room 1 to user
+    //     assigned_room = "Room 1";
+    //     user_occupied_room_1 = true;
+    //   } else if (!user_occupied_room_2 && room2_occupied) {
+    //     assigned_room = "Room 2";
+    //     user_occupied_room_2 = true;
+    //   } else if (!user_occupied_room_3 && room3_occupied) {
+    //     assigned_room = "Room 3";
+    //     user_occupied_room_3 = true;
+    //   } else if (!user_occupied_room_4 && room4_occupied) {
+    //     assigned_room = "Room 4";
+    //     user_occupied_room_4 = true;
+    //   }
+    // } else {
+    //   // user is assigned to non occupied room
+    //   if (!admin_join) {
+    //     assigned_room = "Room 1";
+    //     if (!user_occupied_room_1) {
+    //       // assign room 1 to user
+    //       assigned_room = "Room 1";
+    //       user_occupied_room_1 = true;
+    //     } else if (!user_occupied_room_2) {
+    //       assigned_room = "Room 2";
+    //       user_occupied_room_2 = true;
+    //     } else if (!user_occupied_room_3) {
+    //       assigned_room = "Room 3";
+    //       user_occupied_room_3 = true;
+    //     } else if (!user_occupied_room_4) {
+    //       assigned_room = "Room 4";
+    //       user_occupied_room_4 = true;
+    //     }
+    //   }
+    // }
+
+    //assign room
+    if (!admin_join) {
+
+      // if (!user_occupied_room_1) {
+      //   assigned_room = "Room 1";
+      //   user_occupied_room_1 = true;
+      // } else if (!user_occupied_room_2) {
+      //   assigned_room = "Room 2";
+      //   user_occupied_room_2 = true;
+      // } else if (!user_occupied_room_3) {
+      //   assigned_room = "Room 3";
+      //   user_occupied_room_3 = true;
+      // } else if (!user_occupied_room_4) {
+      //   assigned_room = "Room 4";
+      //   user_occupied_room_4 = true;
+      // }
+      let rooms = roomsAvailable();
+      user_occupied_room_1 = rooms[0];
+      user_occupied_room_2 = rooms[1];
+      user_occupied_room_3 = rooms[2];
+      user_occupied_room_4 = rooms[3];
+      let admins = adminsAvailable();
+      room1_occupied = admins[0];
+      room2_occupied = admins[1];
+      room3_occupied = admins[2];
+      room4_occupied = admins[3];
+
       if (!user_occupied_room_1 && room1_occupied) {
         // assign room 1 to user
         assigned_room = "Room 1";
@@ -369,52 +434,17 @@ io.on("connection", (socket) => {
         assigned_room = "Room 4";
         user_occupied_room_4 = true;
       }
-    } else {
-      // user is assigned to non occupied room
-      if (!admin_join) {
-        assigned_room = "Room 1";
-        if (!user_occupied_room_1) {
-          // assign room 1 to user
-          assigned_room = "Room 1";
-          user_occupied_room_1 = true;
-        } else if (!user_occupied_room_2) {
-          assigned_room = "Room 2";
-          user_occupied_room_2 = true;
-        } else if (!user_occupied_room_3) {
-          assigned_room = "Room 3";
-          user_occupied_room_3 = true;
-        } else if (!user_occupied_room_4) {
-          assigned_room = "Room 4";
-          user_occupied_room_4 = true;
-        }
-      }
-    }
 
-    //assign room
-     if(admin_join){
-    //   if (!user_occupied_room_1) {
-    //     assigned_room = "Room 1";
-    //     user_occupied_room_1 = true;
-    //   } else if (!user_occupied_room_2) {
-    //     assigned_room = "Room 2";
-    //     user_occupied_room_2 = true;
-    //   } else if (!user_occupied_room_3) {
-    //     assigned_room = "Room 3";
-    //     user_occupied_room_3 = true;
-    //   } else if (!user_occupied_room_4) {
-    //     assigned_room = "Room 4";
-    //     user_occupied_room_4 = true;
-    //   }
-      
-    //   user.room = assigned_room
-    // }else{
+      user.room = assigned_room
+    } else {
       //admin room asssign is handled elsewhere
       console.log("admin_join");
       user.admin = true;
       admin_join = false;
-    } else {
-      user.room = assigned_room;
     }
+    // } else {
+    //   user.room = assigned_room;
+    // }
 
     socket.join(user.room);
     //console.log(user.room);
@@ -437,9 +467,9 @@ io.on("connection", (socket) => {
 
   socket.on("sendMessage", (message, callback) => {
     const user = getUser(socket.id);
-    if(!user){
+    if (!user) {
 
-    }else{
+    } else {
       io.to(user.room).emit("message", generateMessage(user.username, message));
     }
     callback();
@@ -448,37 +478,36 @@ io.on("connection", (socket) => {
   socket.on("sendCommand", (command, callback) => {
     //const admin = getAdmin(socket.id);
     const admin = getUser(socket.id);
-    if(!admin.admin){
+    if (!admin.admin) {
       console.log(`User ${admin} attempted to use command: ${command}`);
       socket.emit("message", generateMessage("System", `Users cannot use commands! This incident will be reported.`));
-    }else{
+    } else {
       console.log('command means thing happens --------------------');
       //parse command
       var temp = command.trim().split(" ");
       var parsedCommand;
-      if(commandsList.includes(temp[0])){
-        parsedCommand = {comm: temp[0], param: temp[1]};
-      }else{
-        parsedCommand = {comm: 'bad', param: null};
+      if (commandsList.includes(temp[0])) {
+        parsedCommand = { comm: temp[0], param: temp[1] };
+      } else {
+        parsedCommand = { comm: 'bad', param: null };
       }
       console.log(parsedCommand)
       socket.broadcast.to(admin.room).emit("command", parsedCommand);
     }
     callback();
-    
+
   });
 
 
   socket.on("disconnect", () => {
     const user = removeUser(socket.id);
     if (user) {
-
-      let rooms = roomsAvailable();
-        user_occupied_room_1 = rooms[0];
-        user_occupied_room_2 = rooms[1];
-        user_occupied_room_3 = rooms[2];
-        user_occupied_room_4 = rooms[3];
-
+      // let rooms = roomsAvailable();
+      // user_occupied_room_1 = rooms[0];
+      // user_occupied_room_2 = rooms[1];
+      // user_occupied_room_3 = rooms[2];
+      // user_occupied_room_4 = rooms[3];
+      console.log(`${user.username} has left!`);
 
       io.to(user.room).emit(
         "message",
@@ -490,7 +519,7 @@ io.on("connection", (socket) => {
       });
     }
 
-    console.log(user_occupied_room_1, user_occupied_room_2, user_occupied_room_3, user_occupied_room_4);
+    //console.log(user_occupied_room_1, user_occupied_room_2, user_occupied_room_3, user_occupied_room_4);
   });
 });
 
