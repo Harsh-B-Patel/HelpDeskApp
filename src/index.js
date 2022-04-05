@@ -98,7 +98,7 @@ var room1_occupied = false;
 var room2_occupied = false;
 var room3_occupied = false;
 var room4_occupied = false;
-//var foundAdmin = false;
+var foundAdmin = false;
 var admin_join = false;
 var user_occupied_room_1 = false;
 var user_occupied_room_2 = false;
@@ -154,9 +154,22 @@ MongoClient.connect(
             results.length >0 
           ) {
             // no room filed needed here
-            //foundAdmin = true;
+            foundAdmin = true;
             console.log("this is the value of the found now --> ", results);
             console.log("the admin is fully authenticated!!");
+
+            if (req.body.room == "Room 1") {
+              room1_occupied = true;
+            }
+            if (req.body.room == "Room 2") {
+              room2_occupied = true;
+            }
+            if (req.body.room == "Room 3") {
+              room3_occupied = true;
+            }
+            if (req.body.room == "Room 4") {
+              room4_occupied = true;
+            }
 
             admin_join = true;
             console.log(req.body.room);
@@ -263,6 +276,7 @@ app.get("/adminform", (req, res) => {
       sessions.delete(req.cookies["session_token"]);
       return res.redirect("/adminform.html");
     }
+    foundAdmin = true;
     admin_join = true;
     return res.redirect(`/adminform2.html?username=${ses_cookie.username}`);
   }
@@ -281,6 +295,7 @@ app.post("/adminjoin2", (req,res) => {
       sessions.delete(req.cookies["session_token"]);
       return res.redirect("/adminform.html");
     }
+    foundAdmin = true;
     admin_join = true;
     return res.redirect(`/chat.html?username=${req.body.username}&room=${req.body.room}`);
   }
@@ -335,28 +350,70 @@ io.on("connection", (socket) => {
       return callback(error);
     }
 
-    //assign room
-    if(!admin_join){
-      if (!user_occupied_room_1) {
+    if (foundAdmin & !admin_join) {
+      // if an admin is logged in
+      // chnage user room to admin room
+
+      // if an admin is with another user in a room then assign a new room to user
+      if (!user_occupied_room_1 && room1_occupied) {
+        // assign room 1 to user
         assigned_room = "Room 1";
         user_occupied_room_1 = true;
-      } else if (!user_occupied_room_2) {
+      } else if (!user_occupied_room_2 && room2_occupied) {
         assigned_room = "Room 2";
         user_occupied_room_2 = true;
-      } else if (!user_occupied_room_3) {
+      } else if (!user_occupied_room_3 && room3_occupied) {
         assigned_room = "Room 3";
         user_occupied_room_3 = true;
-      } else if (!user_occupied_room_4) {
+      } else if (!user_occupied_room_4 && room4_occupied) {
         assigned_room = "Room 4";
         user_occupied_room_4 = true;
       }
+    } else {
+      // user is assigned to non occupied room
+      if (!admin_join) {
+        assigned_room = "Room 1";
+        if (!user_occupied_room_1) {
+          // assign room 1 to user
+          assigned_room = "Room 1";
+          user_occupied_room_1 = true;
+        } else if (!user_occupied_room_2) {
+          assigned_room = "Room 2";
+          user_occupied_room_2 = true;
+        } else if (!user_occupied_room_3) {
+          assigned_room = "Room 3";
+          user_occupied_room_3 = true;
+        } else if (!user_occupied_room_4) {
+          assigned_room = "Room 4";
+          user_occupied_room_4 = true;
+        }
+      }
+    }
+
+    //assign room
+     if(admin_join){
+    //   if (!user_occupied_room_1) {
+    //     assigned_room = "Room 1";
+    //     user_occupied_room_1 = true;
+    //   } else if (!user_occupied_room_2) {
+    //     assigned_room = "Room 2";
+    //     user_occupied_room_2 = true;
+    //   } else if (!user_occupied_room_3) {
+    //     assigned_room = "Room 3";
+    //     user_occupied_room_3 = true;
+    //   } else if (!user_occupied_room_4) {
+    //     assigned_room = "Room 4";
+    //     user_occupied_room_4 = true;
+    //   }
       
-      user.room = assigned_room
-    }else{
+    //   user.room = assigned_room
+    // }else{
       //admin room asssign is handled elsewhere
       console.log("admin_join");
       user.admin = true;
       admin_join = false;
+    } else {
+      user.room = assigned_room;
     }
 
     socket.join(user.room);
