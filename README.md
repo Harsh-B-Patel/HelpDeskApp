@@ -2,11 +2,13 @@
 
 Developed a web based help desk chat application, with chat rooms, auto customer-admin assignment, admin authentication and many admin-only features that can be used to resolve customer’s issues.
 
-![unknown](https://user-images.githubusercontent.com/46072683/167728746-1d0b4ab1-a02d-4a21-9c78-b08ff7aca475.png)
+<img src="https://user-images.githubusercontent.com/46072683/167728746-1d0b4ab1-a02d-4a21-9c78-b08ff7aca475.png" width="600">
 
-![unknown (1)](https://user-images.githubusercontent.com/46072683/167728755-7f1e5a91-8660-4538-a6ed-8eb86651d1b6.png)
+<img src="https://user-images.githubusercontent.com/46072683/167728755-7f1e5a91-8660-4538-a6ed-8eb86651d1b6.png" width="600">
 
-![unknown (2)](https://user-images.githubusercontent.com/46072683/167728762-48aea6a8-0c38-4ce4-8be4-6635f6f0f486.png)
+<img src="https://user-images.githubusercontent.com/46072683/167728762-48aea6a8-0c38-4ce4-8be4-6635f6f0f486.png" width="600">
+
+
 
 Instructions to run the  Helpdesk application on kali:
 
