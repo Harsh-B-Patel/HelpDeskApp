@@ -2,15 +2,14 @@
 
 Developed a web based help desk chat application, with chat rooms, auto customer-admin assignment, admin authentication and many admin-only features that can be used to resolve customer’s issues.
 
-<img src="https://user-images.githubusercontent.com/46072683/167728746-1d0b4ab1-a02d-4a21-9c78-b08ff7aca475.png" width="600">
+<img src="https://user-images.githubusercontent.com/46072683/167729785-40e03152-80b5-47ae-9089-3ddfb858b64d.png" width="500">
 
-<img src="https://user-images.githubusercontent.com/46072683/167728755-7f1e5a91-8660-4538-a6ed-8eb86651d1b6.png" width="600">
+<img src="https://user-images.githubusercontent.com/46072683/167729804-99378d65-4fed-4811-8ae7-b02733d17808.png" width="500">
 
-<img src="https://user-images.githubusercontent.com/46072683/167728762-48aea6a8-0c38-4ce4-8be4-6635f6f0f486.png" width="600">
+<img src="https://user-images.githubusercontent.com/46072683/167729813-eb7e49e3-9f5d-48a3-9bbc-871ff307c9f0.png" width="500">
 
 
-
-Instructions to run the  Helpdesk application on kali:
+# Instructions to run the  Helpdesk application on kali/Linux:
 
 1) This application needs to have node installed (by default it is installed in kali), Node JS status can be check by running by "node -v". 
 
