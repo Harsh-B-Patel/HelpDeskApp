@@ -2,7 +2,7 @@
 
 Developed a web based help desk chat application, with chat rooms, auto customer-admin assignment, admin authentication and many admin-only features that can be used to resolve customer’s issues.
 
-<img src="https://user-images.githubusercontent.com/46072683/167729785-40e03152-80b5-47ae-9089-3ddfb858b64d.png" width="500" height="350"> <img src="https://user-images.githubusercontent.com/46072683/167729804-99378d65-4fed-4811-8ae7-b02733d17808.png" width="500" height="350">
+<img src="https://user-images.githubusercontent.com/46072683/167729785-40e03152-80b5-47ae-9089-3ddfb858b64d.png" width="500" height="350" /> <img src="https://user-images.githubusercontent.com/46072683/167729804-99378d65-4fed-4811-8ae7-b02733d17808.png" width="500" height="350" />
 
 <img src="https://user-images.githubusercontent.com/46072683/167729813-eb7e49e3-9f5d-48a3-9bbc-871ff307c9f0.png" width="500">
 
